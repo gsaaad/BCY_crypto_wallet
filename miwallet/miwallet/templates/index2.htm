@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Mi-Wallet</title>
+  </head>
+  <body>
+    <header class="border-b border-4 border-slate-600 bg-slate-200 rounded">
+      <nav class="flex m-4 p-2 text-2xl font-semibold">
+        <div class="basis-4/5">
+          <a href="/">Mi-Wallet</a>
+        </div>
+        <div class="basis-1/5">
+          <ul class="flex space-x-24 text-2xl font-semibold">
+            <li><a href="login">Login</a></li>
+            <li><a href="register">Register</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div
+      class="main-container m-6 p-4 bg-orange-200 rounded-lg text-2xl text-center"
+    >
+      <h2>Wallet Source: Blockchain</h2>
+      <h2>Address:</h2>
+      <h3>Bitcoin Price: $</h3>
+
+      <div>
+        <h3>Balance USD: $</h3>
+      </div>
+
+      <div class="space-x-96">
+        <button class="bg-orange-300 rounded-xl p-2 border-4 border-rose-600">
+          Send Bitcoin
+        </button>
+        <button class="bg-orange-300 rounded-xl p-2 border-4 border-rose-600">
+          Receive Bitcoin
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

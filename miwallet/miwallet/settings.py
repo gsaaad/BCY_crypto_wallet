@@ -55,7 +55,7 @@ ROOT_URLCONF = "miwallet.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [r'C:\Users\SaadG\Desktop\PaySpace\miwallet\miwallet\templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
