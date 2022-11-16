@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi-Wallet home</title>
+  </head>
+  <body>
+    {% extends "index2.htm" %} {% block content %}
+    <h2>Consume API</h2>
+    <ul>
+      {% for todo in todos %}
+      <li>TASK ID: {{ todo.id }} - TASK: {{ todo.title }}</li>
+      <p>USER ID:{{todo.userId}}</p>
+      <h1>COMPLETED: {{todo.completed}}</h1>
+      {% endfor %}
+    </ul>
+    {% endblock content %}
+  </body>
+</html>
