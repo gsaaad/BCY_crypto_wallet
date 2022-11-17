@@ -9,13 +9,47 @@
   <body>
     {% extends "index2.htm" %} {% block content %}
     <h2>Consume API</h2>
-    <ul>
+    <!--
+    <div class="grid grid-rows-1 bg-rose-400 rounded-lg">
+       <div class="grid grid-cols-8 bg-orange-200 rounded-lg">
+        <div class="bg-orange-500 rounded-lg m-2 p-2">STATS HEADERS</div>
+        <div class="bg-orange-500 rounded-lg m-2 p-2">STATS HEADERS</div>
+        <div class="bg-orange-500 rounded-lg m-2 p-2">STATS HEADERS</div>
+        <div class="bg-orange-500 rounded-lg m-2 p-2">STATS HEADERS</div>
+      </div> 
+    </div> -->
+
+    <div
+      class="grid grid-cols-3 bg-emerald-400 rounded-sm text-base p-2 font-semibold text-white"
+    >
+      <div>$USD-Price</div>
+      <div>24H-Change%</div>
+      <div>7D-Change%</div>
+    </div>
+    {% for coin in data%}
+    <div class="grid grid-rows-1 rounded-lg drop-shadow-md">
+      <div
+        class="grid grid-row-1 bg-cyan-300 rounded-sm text-base mt-2 font-semibold"
+      >
+        {{coin.name}} || {{coin.currency_symbol}}
+        <div
+          class="grid grid-cols-3 bg-orange-200 rounded-sm text-base font-semibold"
+        >
+          <div>{{coin.inst_price_usd}}</div>
+          <div>{{coin.change_percent_1d}}</div>
+          <div>{{coin.change_percent_7d}}</div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- <ul>
       {% for todo in todos %}
       <li>TASK ID: {{ todo.id }} - TASK: {{ todo.title }}</li>
       <p>USER ID:{{todo.userId}}</p>
       <h1>COMPLETED: {{todo.completed}}</h1>
       {% endfor %}
-    </ul>
+    </ul> -->
     {% endblock content %}
   </body>
 </html>
