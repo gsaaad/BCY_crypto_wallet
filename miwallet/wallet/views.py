@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.urls import path
+from .login import loginForm
+from pymongo import MongoClient
+
 import requests
 # Create your views here.
 
@@ -22,22 +25,22 @@ def home(request):
     response = requests.request("GET", url, headers=headers, params=querystring)
 #    todos = response.json()
     total_data = response.json()['data']
-    print(total_data)
+    # print(total_data)
     # print("RESPONSE:", response)
     # print("TOTAL DATA:                   ",total_data)
     # print(type(total_data))
     
     # print("----------------------")
     data_dict = total_data[0]
-    print(type(data_dict))
+    # print(type(data_dict))
     ("---------------")
     screen_data = data_dict['screen_data']
     crypto_data = screen_data['crypto_data']
     # get top
     crypto_data = crypto_data[:15]
-    print(type(crypto_data))
-    print(len(crypto_data))
-    print(crypto_data)
+    # print(type(crypto_data))
+    # print(len(crypto_data))
+    # print(crypto_data)
     
     # print()
     
@@ -45,7 +48,31 @@ def home(request):
     return render(request, "home.html", {"data": crypto_data})
 
 def login(request):
-    return render(request, 'login.html')
+    client = MongoClient('mongodb+srv://gsaaad:mongodjango@cluster0.4yjqtsv.mongodb.net/?retryWrites=true&w=majority', 27017)
+
+    print("LOGIN",login)
+    print("----------")
+    form = loginForm()
+    
+    if request.method == 'POST':
+        form = loginForm(request.POST)
+        
+        if form.is_valid():
+            print("VALIDATED!")
+            print("Email: "+form.cleaned_data['email'])
+            print("Password: "+form.cleaned_data['password'])
+            db = client['miWallets']
+            Users = db['Users']
+            print(form.cleaned_data['email'])
+            
+            result = Users.find_one({"email":form.cleaned_data['email']})
+            print(result)
+            
+            if result:
+                print("we found your email in your mongo database! login! auth!]")
+
+     
+    return render(request, 'login.html', {'form':form})
 
 def register(request):
     return render(request, 'register.html')
