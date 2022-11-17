@@ -9,31 +9,32 @@
   </head>
   <body>
     <header class="border-b border-4 border-slate-600 bg-slate-200 rounded">
-      <nav class="flex m-4 p-2 text-2xl font-semibold">
+      <nav class="flex m-4 p-2 text-base font-semibold md:text-2xl lg:text-2xl">
         <div class="basis-4/5">
           <a href="/">Mi-Wallet</a>
         </div>
         <div class="basis-1/5">
-          <ul class="flex space-x-24 text-2xl font-semibold">
+          <ul class="flex space-x-24 text-base font-semibold md:text-2xl lg:text-2xl">
             <li><a href="login">Login</a></li>
           </ul>
         </div>
       </nav>
     </header>
     <div
-      class="main-container w-2/5 mx-auto mt-36 p-4 bg-orange-200 rounded-lg text-2xl text-center"
+      class="main-container w-5/6 mx-auto mt-16 p-4 bg-teal-500 rounded-lg text-lg text-center drop-shadow-[0_35px_35px_rgba(5,5,5,0.44)] sm:w-3/5 md:text-2xl"
     >
-      <form class="grid grid-cols-2 w-3/5 mx-auto">
+      <form class="grid grid-rows-1 w-5/6 mx-auto font-semibold">
         <label>First Name:</label>
-        <input type="text" class="border-4 border-slate-700 rounded-xl m-2"/>
+        <input type="text" class="border-2 border-slate-600 rounded-xl m-2"/>
         <label>Last Name:</label>
-        <input type="text" class="border-4 border-slate-700 rounded-xl m-2"/>
+        <input type="text" class="border-2 border-slate-600 rounded-xl m-2"/>
         <label>Username:</label>
-        <input type="text" class="border-4 border-slate-700 rounded-xl m-2"/>
+        <input type="text" class="border-2 border-slate-600 rounded-xl m-2"/>
         <label>Email:</label>
-        <input type="text" class="border-4 border-slate-700 rounded-xl m-2"/>
+        <input type="text" class="border-2 border-slate-600 rounded-xl m-2"/>
         <label>Password:</label>
-        <input type="text" class="border-4 border-slate-700 rounded-xl m-2"/>
+        <input type="text" class="border-2 border-slate-600 rounded-xl m-2"/>
+        <button class="rounded-lg mx-auto bg-teal-300 m-2 p-2 w-3/5 border-2 border-slate-600 md:w-4/5">Register</button>
 
       </form>
       </div>

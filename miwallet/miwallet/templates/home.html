@@ -8,7 +8,6 @@
   </head>
   <body>
     {% extends "index2.htm" %} {% block content %}
-    <h2>Consume API</h2>
     <!--
     <div class="grid grid-rows-1 bg-rose-400 rounded-lg">
        <div class="grid grid-cols-8 bg-orange-200 rounded-lg">
@@ -20,7 +19,7 @@
     </div> -->
 
     <div
-      class="grid grid-cols-3 bg-emerald-400 rounded-sm text-base p-2 font-semibold text-white"
+      class="grid grid-cols-3 bg-teal-600 rounded-sm text-base p-2 font-semibold text-white mt-8"
     >
       <div>$USD-Price</div>
       <div>24H-Change%</div>
@@ -29,13 +28,13 @@
     {% for coin in data%}
     <div class="grid grid-rows-1 rounded-lg drop-shadow-md">
       <div
-        class="grid grid-row-1 bg-cyan-300 rounded-sm text-base mt-2 font-semibold"
+        class="grid grid-row-1 bg-teal-500 rounded-sm text-base mt-2 font-semibold"
       >
         {{coin.name}} || {{coin.currency_symbol}}
         <div
-          class="grid grid-cols-3 bg-orange-200 rounded-sm text-base font-semibold"
+          class="grid grid-cols-3 bg-cyan-100 rounded-sm text-base font-semibold"
         >
-          <div>{{coin.inst_price_usd}}</div>
+          <div>${{coin.inst_price_usd}}</div>
           <div>{{coin.change_percent_1d}}</div>
           <div>{{coin.change_percent_7d}}</div>
         </div>

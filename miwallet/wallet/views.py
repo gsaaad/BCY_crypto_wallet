@@ -22,6 +22,7 @@ def home(request):
     response = requests.request("GET", url, headers=headers, params=querystring)
 #    todos = response.json()
     total_data = response.json()['data']
+    print(total_data)
     # print("RESPONSE:", response)
     # print("TOTAL DATA:                   ",total_data)
     # print(type(total_data))
@@ -32,12 +33,15 @@ def home(request):
     ("---------------")
     screen_data = data_dict['screen_data']
     crypto_data = screen_data['crypto_data']
-    # get top 15 coins
+    # get top
     crypto_data = crypto_data[:15]
     print(type(crypto_data))
     print(len(crypto_data))
     print(crypto_data)
-    #render
+    
+    # print()
+    
+
     return render(request, "home.html", {"data": crypto_data})
 
 def login(request):
