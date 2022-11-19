@@ -60,6 +60,8 @@ print("balance of user 1 OG ADDRESS {}".format(blockcypher.get_total_balance(use
 print("balance of user 2 OG ADDRESS {}".format(blockcypher.get_total_balance(user2_OG_address, coin_symbol=symbol)))
 
 print("is USER 1 OG address valid address {} and valid for coin BCY {}".format(blockcypher.is_valid_address(user1_OG_address), is_valid_address_for_coinsymbol(user1_OG_address, coin_symbol=symbol)))
+print("is USER 1 PRIV address valid address {} and valid for coin BCY {}".format(blockcypher.is_valid_address(user1_priv_address), is_valid_address_for_coinsymbol(user1_priv_address, coin_symbol=symbol)))
+
 print("is USER 2 OG address valid address {} and valid for coin BCY {}".format(blockcypher.is_valid_address(user2_OG_address), is_valid_address_for_coinsymbol(user2_OG_address, coin_symbol=symbol)))
 
 
@@ -80,7 +82,28 @@ print("sending payment from user 1 OG address to user 2 OG address with {}".form
 # print("user1 OG is valid for coin BCY ??", is_user1_priv_valid_for_coin)
 # print("is user2 OAP address a valid address for bcy", is_oap_address_valid_for_coin)
 
-create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol=symbol, api_key=token, verify_tosigntx=True, change_address=user1_OG_address)
+create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol=symbol, api_key=token, verify_tosigntx=True,change_address=user1_OG_address)
 
-print("unsigned tx", create_unsigned_tx)
+# print("unsigned tx", create_unsigned_tx)
+to_sign_tx = {'tosign_tx': ['010000000198b4df73bf8ffc1d0a0ff992b2cb1fa07e9ef0432d28c18f562ceca42eecffda000000001976a914b253c95a486d84674e3eff679b87ebd92477289388acffffffff02ae080000000000001976a914b41954bcdb5252b71644f4e8fab35c97fce132d688acba469800000000001976a914b253c95a486d84674e3eff679b87ebd92477289388ac0000000001000000'], 'tosign': ['799d0a0a878b3b51fef88c902d617c3bcc995f6aba7e2cbc7a8925a09563c4e7']}
+to_sign = '799d0a0a878b3b51fef88c902d617c3bcc995f6aba7e2cbc7a8925a09563c4e7'
+print("toSign = ", to_sign)
 
+verify_unsigned = blockcypher.verify_unsigned_tx(unsigned_tx=to_sign_tx, outputs=outputs, coin_symbol=symbol, change_address=user1_OG_address)
+print(verify_unsigned)
+
+
+input_addresses = blockcypher.get_input_addresses(create_unsigned_tx)
+print("INPUT ADDRESES", input_addresses)
+
+tx = to_sign_tx['tosign_tx']
+print(tx)
+tx_signatures = blockcypher.make_tx_signatures(tx,privkey_list=[user1_priv_address], pubkey_list=[user1_pub_address])
+print("trasnaction signatture is: ", tx_signatures)
+
+print("broadcasting!")
+
+addresses_pubkeys = [user1_pub_address]
+broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx, tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
+
+print("broadcast is:.... ", broadcast_tx)
