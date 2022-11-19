@@ -30,11 +30,12 @@
         <input type="text" class="border-2 border-slate-600 rounded-xl"/>
         <button class="rounded-lg mx-auto bg-teal-300 m-2 p-2 w-3/5 border-2 border-slate-600">Log In</button>
       </form> -->
-      <form method="POST">
-
+      <form method="POST" class="space-y-4">
+        <h2 class="font-semibold text-white">Log in below to access Mi-Wallet</h2>
+        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fgetwallpapers.com%2Fwallpaper%2Ffull%2Fb%2F1%2Ff%2F275164.jpg&f=1&nofb=1&ipt=3245bf36bf9d9fceef7263ada724b44ec31846cf582c2b67e2daabe22178955d&ipo=images" class="rounded-xl"/>
         {{form.as_p}}
         {% csrf_token %}
-        <input type="submit" value="submit" class="bg-teal-300 p-2 w-2/5 border-2 border-slate-600 rounded-xl"/>
+        <input type="submit" value="Log In" class="bg-teal-300 p-2 w-2/5 border-2 border-slate-600 rounded-xl"/>
       </form>
 
       </div>
