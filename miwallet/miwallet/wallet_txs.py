@@ -96,13 +96,14 @@ print(verify_unsigned)
 input_addresses = blockcypher.get_input_addresses(create_unsigned_tx)
 print("INPUT ADDRESES", input_addresses)
 
-tx = to_sign_tx['tosign_tx']
+tx = to_sign_tx['tosign']
 print(tx)
+
+# user 1 priv and public
 tx_signatures = blockcypher.make_tx_signatures(tx,privkey_list=[user1_priv_address], pubkey_list=[user1_pub_address])
 print("trasnaction signatture is: ", tx_signatures)
 
 print("broadcasting!")
-
 addresses_pubkeys = [user1_pub_address]
 broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx, tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
 
