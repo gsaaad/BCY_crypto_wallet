@@ -111,15 +111,8 @@ def register(request):
                     }
                 Users.insert_one(user)
                 print("REGISTRATION COMPLETE! WELCOME TO MIWALLET")
-            
-            
-            
-            
-            
-            
-            
-        
-
-        
-
+                
     return render(request, 'register.html', {'form': form})
+
+def payment(request):
+    return render(request, 'payment.html')

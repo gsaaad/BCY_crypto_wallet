@@ -25,28 +25,16 @@
       class="main-container m-6 p-2 bg-gradient-to-b from-slate-200 via-zinc-400 to-slate-500 rounded-lg text-2xl text-center"
     >
       <h2>Wallet Source: BlockCypher</h2>
-      <div>
-        <h2>Address:</h2>
+      <form>
+        <!-- todo get logged in user's waalet/addresses -->
+        <!-- todo display address 1 balance / drag down to select option of addresses -->
 
-        <div>
-          <h3>Balance USD: $</h3>
-        </div>
-
-        <div class="space-y-4">
-          <a
-            href="payment"
-            class="bg-gradient-to-b from-emerald-300 via-teal-400 to-cyan-400 rounded-lg p-2 border-2 border-teal-600"
-          >
-            Send Bitcoin
-          </a>
-          <button
-            class="bg-gradient-to-b from-emerald-300 via-teal-400 to-cyan-400 rounded-lg p-2 border-2 border-teal-600"
-          >
-            Receive Bitcoin
-          </button>
-        </div>
-      </div>
-      <div>{% block content %} {% endblock content %}</div>
+        <input
+          type="submit"
+          value="Check For Valid Address"
+          class="bg-teal-300 p-2 w-2/5 border-2 border-slate-600 rounded-xl"
+        />
+      </form>
     </div>
   </body>
 </html>
