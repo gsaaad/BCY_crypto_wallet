@@ -7,10 +7,10 @@ import django.contrib.auth as auth
 import requests
 # Create your views here.
 
-def index(request):
+def home(request):
     return render(request, 'index2.htm')
 
-def home(request):
+def index(request):
    # get the list of todos
 #    response = requests.get('https://jsonplaceholder.typicode.com/todos/')
    # transfor the response to json objects

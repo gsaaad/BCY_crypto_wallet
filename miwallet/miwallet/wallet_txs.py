@@ -23,35 +23,35 @@ token='df29ec63ab9047cc9520edae52e1ead2'
 
 
 #get address overview
-address_overview = blockcypher.get_address_overview(user1_OG_address, coin_symbol=symbol)
+# address_overview = blockcypher.get_address_overview(user1_OG_address, coin_symbol=symbol)
 # print("Address Overview of user 1 OG address",address_overview)
 
 #get address details
-address_details = blockcypher.get_address_details(user1_OG_address, coin_symbol=symbol, show_confidence=True, include_script=True)
+# address_details = blockcypher.get_address_details(user1_OG_address, coin_symbol=symbol, show_confidence=True, include_script=True)
 # print("Address_Details",address_details)
 
-address_total_balance = blockcypher.get_total_balance(user1_OG_address, coin_symbol=symbol)
+# address_total_balance = blockcypher.get_total_balance(user1_OG_address, coin_symbol=symbol)
 # print("total Balance for {} is: ".format(user1_OG_address), address_total_balance)
 
 # transfers satoshis to number of real BTC. v this example is bcy amount from address
-total_base_balance = blockcypher.from_base_unit(address_total_balance, 'btc')
+# total_base_balance = blockcypher.from_base_unit(address_total_balance, 'btc')
 # print("Base balance: ",total_base_balance)
 
-total_num_transactions = blockcypher.get_total_num_transactions(user1_OG_address, coin_symbol=symbol)
+# total_num_transactions = blockcypher.get_total_num_transactions(user1_OG_address, coin_symbol=symbol)
 # print("Total transactions of user 1 og address: ",total_num_transactions)
 
 # current_block_height = blockcypher.get_latest_block_height(coin_symbol=symbol)
 # print("Current Block Height with symbol {}".format(symbol), current_block_height)
 
-current_block_height = blockcypher.get_latest_block_height()
+# current_block_height = blockcypher.get_latest_block_height()
 # print("Current Block Height with symbol {}".format('btc'), current_block_height)
 
 # print("Coins from blockcypher coin constant list", blockcypher.constants.COIN_SYMBOL_LIST)
 
-valid_address = blockcypher.is_valid_address(user1_OG_address)
+# valid_address = blockcypher.is_valid_address(user1_OG_address)
 # print("is user 1 OG address: {} a valid address? [True = yes, False = no]:  ".format(user1_OG_address), valid_address)
 
-list_of_wallet_names = blockcypher.list_wallet_names(token)
+# list_of_wallet_names = blockcypher.list_wallet_names(token)
 # print("list of wallet names", list_of_wallet_names)
 
 
@@ -74,7 +74,7 @@ is_user2_OAP_address_valid_for_coin = is_valid_address_for_coinsymbol(user2_oap_
 
 
 #todo sending 2222 from user 1 OG, to user 2 OG
-satoshi_amount = 2222
+satoshi_amount = 7777
 inputs = [{'address': user1_OG_address}]
 outputs = [{'address': user2_OG_address, "value": satoshi_amount}]
 
@@ -84,8 +84,11 @@ print("sending payment from user 1 OG address to user 2 OG address with {}".form
 
 create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol=symbol, api_key=token, verify_tosigntx=True,change_address=user1_OG_address)
 
-# print("unsigned tx", create_unsigned_tx)
-to_sign_tx = {'tosign_tx': ['010000000198b4df73bf8ffc1d0a0ff992b2cb1fa07e9ef0432d28c18f562ceca42eecffda000000001976a914b253c95a486d84674e3eff679b87ebd92477289388acffffffff02ae080000000000001976a914b41954bcdb5252b71644f4e8fab35c97fce132d688acba469800000000001976a914b253c95a486d84674e3eff679b87ebd92477289388ac0000000001000000'], 'tosign': ['799d0a0a878b3b51fef88c902d617c3bcc995f6aba7e2cbc7a8925a09563c4e7']}
+print("unsigned tx", create_unsigned_tx)
+to_sign_tx = {}
+to_sign_tx['tosign_tx'] = create_unsigned_tx['tosign_tx']
+to_sign_tx['tosign'] = create_unsigned_tx['tosign']
+print("to_sign_tx: ", to_sign_tx)
 to_sign = '799d0a0a878b3b51fef88c902d617c3bcc995f6aba7e2cbc7a8925a09563c4e7'
 print("toSign = ", to_sign)
 
