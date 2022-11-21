@@ -18,6 +18,8 @@ Wallets = db['Wallets']
 # collection  OAP
 Oap = db['Oap']
 
+# collection PUBLIC ADDRESSES. USE THESE FOR VALIDITY, STORAGE AND BASIC INFO ABOUT ADDRESSES
+Addresses = db['Addresses']
 
 if db.list_collection_names():
     print("ALL COLLECTIONS in {} Database".format(database_name), db.list_collection_names())
