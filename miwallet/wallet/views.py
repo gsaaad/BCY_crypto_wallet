@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.urls import path
 from .login import loginForm
 from .register import registerForm
+from .payment import checkAddressForm
+from .pay_process import check_valid_address
 from pymongo import MongoClient
 import django.contrib.auth as auth
 import requests
@@ -115,4 +117,17 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 def payment(request):
-    return render(request, 'payment.html')
+    form = checkAddressForm()
+
+    if request.method == 'POST':
+        form = checkAddressForm(request.POST)
+        
+        if form.is_valid():
+            print("validated")
+            address = form.cleaned_data["address"]
+            is_valid_address = check_valid_address(address)
+            is_valid_address_for_coinsymbol = block
+            
+            
+            
+    return render(request, 'payment.html', {'form': form})
