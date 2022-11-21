@@ -1,7 +1,8 @@
 import blockcypher
 import blockcypher.utils as bcUtils
 from datetime import datetime
-from models import Oap
+import requests
+from .models import Oap
 
 def search_address(address):
     date_search = datetime.now()
@@ -46,5 +47,25 @@ def search_address_details(address, symbol='bcy'):
         # print(balance, unconfirmed_balance, total_balance,numTx,unconfirmed_numTx,total_numTx, total_sent, total_received)
         address_details = {"balance": balance, "unconfirmed_balance": unconfirmed_balance, "total_balance": total_balance, "numTx": numTx, "unconfirmed_numTx": unconfirmed_numTx, "total_numTx": total_numTx, "total_sent": total_sent, "total_received": total_received}
         return address_details
-search_address_details('C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw')
+
+def get_top_fifteen_coins():
+    url = "https://investing-cryptocurrency-markets.p.rapidapi.com/coins/list"
+    querystring = {"edition_currency_id":"12","time_utc_offset":"28800","lang_ID":"1","sort":"MARKETCAP_DN","page":"1"}
+    headers = {
+        "X-RapidAPI-Key": "204482477cmshdd6f520fedecd46p1ea1fbjsne7e8a3e634f6",
+        "X-RapidAPI-Host": "investing-cryptocurrency-markets.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    total_data = response.json()['data']
+
+    data_dict = total_data[0]
+    ("---------------")
+    screen_data = data_dict['screen_data']
+    crypto_data = screen_data['crypto_data']
+    # get top 15
+    top_fifteen = crypto_data[:15]
+    return top_fifteen
+
+# search_address_details('C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw')
 # search_address('C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw')
