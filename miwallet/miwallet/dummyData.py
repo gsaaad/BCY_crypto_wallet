@@ -46,6 +46,7 @@ Oap.insert_many([oap1, oap2, oap3, oap4, oap5])
 # print("WE GOT BALANCE FROM DUMMY DATA", user1_details)
 
 oap_array = [oap1, oap2, oap3, oap4, oap5]
+#add Query data about accounts on initial db
 for oapAddress in oap_array:
     address = oapAddress['original_address']
     
