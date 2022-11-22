@@ -24,17 +24,10 @@ def search_address(address):
         print("could not find address")
     finally:
         print("searching for address in database complete..")
-    
-
 def search_address_details(address, symbol='bcy'):
-    is_valid = blockcypher.is_valid_address(address)
-    is_coin_valid = bcUtils.is_valid_coin_symbol(symbol)
-    is_valid_for_coin = bcUtils.is_valid_address_for_coinsymbol(address, symbol)
-    print("is {} a valid address? : {}".format(address, is_valid))
-    print("is {} a valid coin on source 'blockcypher'? : {}".format(symbol, is_coin_valid))
-    print("is {} a valid address for coin {}? : {}".format(address, symbol, is_valid_for_coin))
-    
-    if is_valid and is_coin_valid and is_valid_for_coin:
+
+    is_valid = is_valid_pre_payment(address,symbol)
+    if is_valid:
         address_details = blockcypher.get_address_details(address, symbol)
         balance = address_details['balance']
         unconfirmed_balance = address_details['unconfirmed_balance']
@@ -47,7 +40,15 @@ def search_address_details(address, symbol='bcy'):
         # print(balance, unconfirmed_balance, total_balance,numTx,unconfirmed_numTx,total_numTx, total_sent, total_received)
         address_details = {"balance": balance, "unconfirmed_balance": unconfirmed_balance, "total_balance": total_balance, "numTx": numTx, "unconfirmed_numTx": unconfirmed_numTx, "total_numTx": total_numTx, "total_sent": total_sent, "total_received": total_received}
         return address_details
-
+def is_valid_pre_payment(address,symbol='bcy'):
+    is_valid = blockcypher.is_valid_address(address)
+    is_coin_valid = bcUtils.is_valid_coin_symbol(symbol)
+    is_valid_for_coin = bcUtils.is_valid_address_for_coinsymbol(address, symbol)
+    print("is {} a valid address? : {}".format(address, is_valid))
+    print("is {} a valid coin on source 'blockcypher'? : {}".format(symbol, is_coin_valid))
+    print("is {} a valid address for coin {}? : {}".format(address, symbol, is_valid_for_coin))
+    valid = is_valid and is_coin_valid and is_valid_for_coin
+    return valid
 def get_top_fifteen_coins():
     url = "https://investing-cryptocurrency-markets.p.rapidapi.com/coins/list"
     querystring = {"edition_currency_id":"12","time_utc_offset":"28800","lang_ID":"1","sort":"MARKETCAP_DN","page":"1"}

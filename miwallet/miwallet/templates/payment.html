@@ -25,7 +25,7 @@
       class="main-container m-6 p-2 bg-gradient-to-b from-slate-200 via-zinc-400 to-slate-500 rounded-lg text-2xl text-center"
     >
       <h2>Wallet Source: BlockCypher</h2>
-      <form method="POST">
+      <form method="POST" class="space-y-4">
         <!-- todo get logged in user's waalet/addresses -->
         <!-- todo display address 1 balance / drag down to select option of addresses -->
         {{form.as_p}} {% csrf_token %}

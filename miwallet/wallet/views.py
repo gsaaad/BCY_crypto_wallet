@@ -1,20 +1,21 @@
 from django.shortcuts import render, redirect
-from django.urls import path
-from django.contrib.auth.models import auth
 from .login import loginForm
 from .register import registerForm
 from .payment import checkAddressForm
-from .pay_process import check_valid_address
 from miwallet import utils
 from pymongo import MongoClient
-
-import django.contrib.auth as auth
+from miwallet import utils
+import blockcypher
 # Create your views here.
 
-def home(request):
+
+token='df29ec63ab9047cc9520edae52e1ead2'
+
+def index(request):   
+    
     return render(request, 'index2.htm')
 
-def index(request):
+def home(request):
    # get the list of todos
 #    response = requests.get('https://jsonplaceholder.typicode.com/todos/')
    # transfor the response to json objects
@@ -104,21 +105,52 @@ def register(request):
                     #todo give them a wallet ID, based on database?
                     }
                 Users.insert_one(user)
+                # user_obj = User.objects.create_user(first_name= form_firstname,email=form_email, password=form_password)
+                # user_obj.save()
+                
                 print("REGISTRATION COMPLETE! WELCOME TO MIWALLET")
+                
                 return redirect('/home')
                 
     return render(request, 'register.html', {'form': form})
 
 def payment(request):
     form = checkAddressForm()
-
+ 
     if request.method == 'POST':
         form = checkAddressForm(request.POST)
-        
         if form.is_valid():
-            print("validated")
-            address = form.cleaned_data["address"]
-            is_valid_address = check_valid_address(address)
+            from_address = form.cleaned_data["from_address"]
+            to_address = form.cleaned_data["to_address"]
+            symbol = form.cleaned_data["coin_symbol"]
+            amount = form.cleaned_data["amount_to_send"]
+            print('validating data..')
+            print("from address", from_address, "to address", to_address, "amount", amount, "symbol", symbol)
+            
+            is_valid_address_one = utils.is_valid_pre_payment(from_address,symbol)
+            is_valid_address_two = utils.is_valid_pre_payment(to_address,symbol)
+            print("validity test for address 1: {}".format(from_address),is_valid_address_one)
+            print("validity test for address 2: {}".format(to_address),is_valid_address_two)
+            
+            #if both addresses are valid, coin is valid and addresses are valid with coin
+            if is_valid_address_one and is_valid_address_two:
+                print("valid adddresses and coin...")
+                
+                #get private key
+                address_one_details = utils.search_address(from_address)
+                # print("from_address details:...", address_one_details)
+                address_one_priv_key = address_one_details['private']
+                
+                #inputs
+                inputs =({'address':from_address})
+                outputs = ({'address': to_address, "value": amount})
+                
+                print("sending payment {} from address: {} to address: {}".format(amount, from_address, to_address))
+                
+                create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol = symbol, api_key=token, verify_tosigntx=True, change_address=from_address)
+                print("unsigned tx", create_unsigned_tx)
+                
+
             
             
             
