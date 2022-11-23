@@ -142,11 +142,11 @@ def payment(request):
                 address_one_priv_key = address_one_details['private']
                 
                 #inputs
-                inputs =({'address':from_address})
-                outputs = ({'address': to_address, "value": amount})
+                inputs =[{'address':from_address}]
+                outputs = [{'address': to_address, "value": amount}]
+                
                 
                 print("sending payment {} from address: {} to address: {}".format(amount, from_address, to_address))
-                
                 create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol = symbol, api_key=token, verify_tosigntx=True, change_address=from_address)
                 print("unsigned tx", create_unsigned_tx)
                 
