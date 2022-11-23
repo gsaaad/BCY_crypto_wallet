@@ -129,6 +129,7 @@ def payment(request):
             
             is_valid_address_one = utils.is_valid_pre_payment(from_address,symbol)
             is_valid_address_two = utils.is_valid_pre_payment(to_address,symbol)
+            #todo frontend notification
             print("validity test for address 1: {}".format(from_address),is_valid_address_one)
             print("validity test for address 2: {}".format(to_address),is_valid_address_two)
             
@@ -140,15 +141,41 @@ def payment(request):
                 address_one_details = utils.search_address(from_address)
                 # print("from_address details:...", address_one_details)
                 address_one_priv_key = address_one_details['private']
+                address_one_pub_key = address_one_details['public']
+
                 
                 #inputs
                 inputs =[{'address':from_address}]
                 outputs = [{'address': to_address, "value": amount}]
                 
-                
+                #todo front end notification
                 print("sending payment {} from address: {} to address: {}".format(amount, from_address, to_address))
+                
+                #create unsigned transactions
                 create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol = symbol, api_key=token, verify_tosigntx=True, change_address=from_address)
                 print("unsigned tx", create_unsigned_tx)
+                
+                to_sign_tx = {}
+                to_sign_tx['tosign_tx'] = create_unsigned_tx['tosign_tx']
+                to_sign_tx['tosign'] = create_unsigned_tx['tosign']
+                
+                #verify transaction
+                verify_unsigned = blockcypher.verify_unsigned_tx(unsigned_tx=to_sign_tx, outputs=outputs, coin_symbol=symbol, change_address= from_address)
+                input_addresses = blockcypher.get_input_addresses(create_unsigned_tx)
+                tx=to_sign_tx['tosign']
+                
+                #signatures
+                tx_signatures = blockcypher.make_tx_signatures(tx, privkey_list = [address_one_priv_key], pubkey_list=[address_one_pub_key])
+                addresses_pubkeys = [address_one_pub_key]
+                
+                #finalize and broadcast transaction
+                #todo frontend notification
+                broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
+                print("broadcasting is:.....", broadcast_tx)
+                
+                
+                
+                
                 
 
             
