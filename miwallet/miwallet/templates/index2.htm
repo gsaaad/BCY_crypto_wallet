@@ -28,20 +28,26 @@
     >
       <h2>Wallet Source: BlockCypher</h2>
 
-      <div class="space-y-4 lg:space-x-12">
+      <div class="space-y-4 lg:space-x-12 sm:space-x-4">
         <a
           href="payment"
-          class="bg-rose-300 rounded-lg p-2 border-2 border-rose-600"
+          class="bg-rose-300 rounded-lg p-2 border-2 border-rose-600 text-base lg:text-xl"
         >
           Send BitCrystals (BCY)
         </a>
-        <button class="bg-blue-400 rounded-lg p-2 border-2 border-blue-600">
+        <button
+          class="bg-blue-400 rounded-lg p-2 border-2 border-blue-600 text-base lg:text-xl"
+        >
           <!-- todo add a QR CODE page to receive payment -->
           Receive BitCrystals (BCY)
         </button>
       </div>
-      <div>{% block top_coins %} {% endblock top_coins %}</div>
-      <div></div>
+      <div class="flex flex-col md:flex-row">
+        <div class="md:basis-4/5 mx-auto">
+          {% block top_coins %} {% endblock top_coins %}
+        </div>
+        <div>{% block news_page %} {% endblock news_page %}</div>
+      </div>
     </div>
   </body>
 </html>

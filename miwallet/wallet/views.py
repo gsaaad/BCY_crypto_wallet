@@ -24,6 +24,13 @@ def home(request):
 
     return render(request, "home.html", {"data": crypto_data})
 
+def news(request):
+    
+    crypto_news = utils.get_crypto_news()
+
+
+    return render(request, "news.html", {"data": crypto_news})
+
 def login(request):
     client = MongoClient('mongodb+srv://gsaaad:mongodjango@cluster0.4yjqtsv.mongodb.net/?retryWrites=true&w=majority', 27017)
 
@@ -172,13 +179,4 @@ def payment(request):
                 #todo frontend notification
                 broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
                 print("broadcasting is:.....", broadcast_tx)
-                
-                
-                
-                
-                
-
-            
-            
-            
     return render(request, 'payment.html', {'form': form})

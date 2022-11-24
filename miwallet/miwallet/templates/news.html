@@ -4,7 +4,36 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <title>Mi-Wallet News</title>
   </head>
-  <body></body>
+  <body>
+    {% extends "index2.htm" %} {% block news_page %}
+    <div class="bg-rose-200 rounded-lg p-2 mt-8 text-md mx-auto">
+      <h1>News</h1>
+
+      <div class="bg-rose-500 rounded-lg">
+        {% for coin in data%}
+        <a href="{{coin.link}}">
+          <div class="flex flex-col rounded-lg drop-shadow-md">
+            <div class="text-white">{{coin.pubDate}} {{coin.creator}}</div>
+            <div
+              class="bg-indigo-900 rounded-lg text-lg text-white mt-2 font-bold lg:text-2xl h-24 text-center align-bottom"
+            >
+              {{coin.title}}
+            </div>
+
+            <div
+              class="bg-rose-600 rounded-lg text-xs text-white mt-2 lg:text-2xl"
+            >
+              {{coin.keywords}}
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% endblock news_page %}
+    </div>
+  </body>
 </html>

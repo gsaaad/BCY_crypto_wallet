@@ -21,7 +21,7 @@
     {% for coin in data%}
     <div class="grid grid-rows-1 rounded-lg drop-shadow-md">
       <div
-        class="grid grid-row-1 bg-rose-600 rounded-sm text-base mt-2 font-semibold text-md text-2xl"
+        class="grid grid-row-1 bg-rose-600 rounded-sm text-base mt-2 font-semibold text-md lg:text-2xl"
       >
         {{coin.name}} || {{coin.currency_symbol}}
         <div
@@ -33,15 +33,6 @@
         </div>
       </div>
     </div>
-    {% endfor %}
-
-    <!-- <ul>
-      {% for todo in todos %}
-      <li>TASK ID: {{ todo.id }} - TASK: {{ todo.title }}</li>
-      <p>USER ID:{{todo.userId}}</p>
-      <h1>COMPLETED: {{todo.completed}}</h1>
-      {% endfor %}
-    </ul> -->
-    {% endblock top_coins %}
+    {% endfor %} {% endblock top_coins %}
   </body>
 </html>

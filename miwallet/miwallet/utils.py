@@ -67,6 +67,10 @@ def get_top_fifteen_coins():
     # get top 15
     top_fifteen = crypto_data[:15]
     return top_fifteen
-
-# search_address_details('C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw')
-# search_address('C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw')
+def get_crypto_news():
+    url = 'https://newsdata.io/api/1/news?apikey=pub_138138276edf3ab14b519df5a6f4315255963&q=crypto&country=ca&language=en'
+    response = requests.request("GET", url)
+    total_data = response.json()['results']
+    top_fifteen_news = total_data[:10]
+    
+    return top_fifteen_news
