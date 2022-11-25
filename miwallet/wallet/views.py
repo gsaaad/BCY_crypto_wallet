@@ -86,7 +86,7 @@ def register(request):
             form_lastname = form.cleaned_data['last_name']
             form_email = form.cleaned_data['email']
             form_password = form.cleaned_data['password']
-            form_dob = str(form.cleaned_data['dob'])
+            form_dob = str(form.cleaned_data['date_of_birth'])
             print("First_name"+ form_firstname)
             print("last_name"+ form_lastname)
             # print("user_name"+ form.cleaned_data['user_name'])
@@ -124,7 +124,7 @@ def register(request):
 def payment(request):
     form = checkAddressForm()
     user_message = ''
- 
+
     if request.method == 'POST':
         form = checkAddressForm(request.POST)
         if form.is_valid():
