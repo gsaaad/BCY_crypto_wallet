@@ -8,13 +8,15 @@
     <title>Mi-Wallet</title>
   </head>
   <body>
-    <header class="border-b border-4 border-slate-600 bg-slate-200 rounded">
-      <nav class="flex m-4 p-2 text-lg font-semibold">
+    <header
+      class="border-b border-4 border-slate-600 bg-gradient-to-r from-rose-400 via-violet-500 to-blue-500 rounded"
+    >
+      <nav class="flex m-4 p-2 text-lg font-semibold lg:text-2xl">
         <div class="basis-4/5">
           <a href="/">Mi-Wallet</a>
         </div>
         <div class="basis-1/5">
-          <ul class="flex space-x-4 text-base font-semibold">
+          <ul class="flex space-x-4 text-base font-semibold lg:text-xl">
             <li><a href="login">Login</a></li>
             <li><a href="register">Register</a></li>
           </ul>
@@ -32,10 +34,13 @@
 
         <input
           type="submit"
-          value="Check For Valid Address"
+          value="Send Payment"
           class="bg-teal-300 p-2 w-2/5 border-2 border-slate-600 rounded-xl"
         />
       </form>
+      <h1 class="text-lg lg:text-2xl border-2 bg-indigo-300 m-2 p-2 rounded-lg">
+        Payment status: {{message}}
+      </h1>
     </div>
   </body>
 </html>

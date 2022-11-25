@@ -123,6 +123,7 @@ def register(request):
 
 def payment(request):
     form = checkAddressForm()
+    user_message = ''
  
     if request.method == 'POST':
         form = checkAddressForm(request.POST)
@@ -177,6 +178,13 @@ def payment(request):
                 
                 #finalize and broadcast transaction
                 #todo frontend notification
-                broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
-                print("broadcasting is:.....", broadcast_tx)
-    return render(request, 'payment.html', {'form': form})
+                user_message=''
+                try:
+                    broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
+                    print("broadcasting is:.....", broadcast_tx)
+                    user_message = "Broadcast transaction successful!"
+                except:
+                    user_message = "Failed to broadcast transaction!"
+            else:
+                user_message='Please check if the address is entered correctly'
+    return render(request, 'payment.html', {'form': form, "message": user_message})

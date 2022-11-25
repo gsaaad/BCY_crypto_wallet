@@ -14,8 +14,8 @@ from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 TEMPLATE_DIR = os.path.join(Path(__file__).resolve().parent,"templates")
+
 print(TEMPLATE_DIR)
 
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "miwallet"
 ]
 
 MIDDLEWARE = [
@@ -89,12 +90,22 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
+#first try argon, then brypt etc.
+PASSWORD_HASHERS = [
+'django.contrib.auth.hashers. Argon2PasswordHasher',
+'django.contrib.auth.hashers BCryptSHA256PasswordHasher',
+'django.contrib.auth.hashers.BCrypt PasswordHasher',
+'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        'OPTIONS':{'min_length': 5}
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
