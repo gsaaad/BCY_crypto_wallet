@@ -4,8 +4,9 @@ from .register import registerForm
 from .payment import checkAddressForm
 from miwallet import utils
 from pymongo import MongoClient
-from miwallet import utils
 import blockcypher
+import blockcypher.utils as bcUtils
+
 # Create your views here.
 
 
@@ -76,6 +77,8 @@ def register(request):
     print("REGISTER")
     print("----------")
     form = registerForm()
+    user_message = ''
+
     
     if request.method == 'POST':
         form = registerForm(request.POST)
@@ -101,6 +104,7 @@ def register(request):
             if result:
                 #we have this email in our record.. did you mean to login?
                 print("We found this email in our records.. Did you mean to login?")
+                user_message='We found this email in our records.. did you mean to login?' 
             else:
                 # not found in database, create new
                 user = {"first_name": form_firstname, 
@@ -109,7 +113,7 @@ def register(request):
                     'password': form_password,
                     'dob': (form_dob),
                     'Wallet': []
-                    #todo give them a wallet ID, based on database?
+                    #todo embed associated wallet, like OAP addresses in DB
                     }
                 Users.insert_one(user)
                 # user_obj = User.objects.create_user(first_name= form_firstname,email=form_email, password=form_password)
@@ -119,7 +123,7 @@ def register(request):
                 
                 return redirect('/home')
                 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {'form': form, "message": user_message})
 
 def payment(request):
     form = checkAddressForm()
@@ -134,57 +138,64 @@ def payment(request):
             amount = form.cleaned_data["amount_to_send"]
             print('validating data..')
             print("from address", from_address, "to address", to_address, "amount", amount, "symbol", symbol)
-            
-            is_valid_address_one = utils.is_valid_pre_payment(from_address,symbol)
-            is_valid_address_two = utils.is_valid_pre_payment(to_address,symbol)
-            #todo frontend notification
-            print("validity test for address 1: {}".format(from_address),is_valid_address_one)
-            print("validity test for address 2: {}".format(to_address),is_valid_address_two)
-            
-            #if both addresses are valid, coin is valid and addresses are valid with coin
-            if is_valid_address_one and is_valid_address_two:
-                print("valid adddresses and coin...")
-                
-                #get private key
-                address_one_details = utils.search_address(from_address)
-                # print("from_address details:...", address_one_details)
-                address_one_priv_key = address_one_details['private']
-                address_one_pub_key = address_one_details['public']
+            is_valid_coin = bcUtils.is_valid_coin_symbol(symbol)
 
-                
-                #inputs
-                inputs =[{'address':from_address}]
-                outputs = [{'address': to_address, "value": amount}]
-                
-                #todo front end notification
-                print("sending payment {} from address: {} to address: {}".format(amount, from_address, to_address))
-                
-                #create unsigned transactions
-                create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol = symbol, api_key=token, verify_tosigntx=True, change_address=from_address)
-                print("unsigned tx", create_unsigned_tx)
-                
-                to_sign_tx = {}
-                to_sign_tx['tosign_tx'] = create_unsigned_tx['tosign_tx']
-                to_sign_tx['tosign'] = create_unsigned_tx['tosign']
-                
-                #verify transaction
-                verify_unsigned = blockcypher.verify_unsigned_tx(unsigned_tx=to_sign_tx, outputs=outputs, coin_symbol=symbol, change_address= from_address)
-                input_addresses = blockcypher.get_input_addresses(create_unsigned_tx)
-                tx=to_sign_tx['tosign']
-                
-                #signatures
-                tx_signatures = blockcypher.make_tx_signatures(tx, privkey_list = [address_one_priv_key], pubkey_list=[address_one_pub_key])
-                addresses_pubkeys = [address_one_pub_key]
-                
-                #finalize and broadcast transaction
+            print("is valid coin????", is_valid_coin, not is_valid_coin)
+            if(is_valid_coin):    
+                is_valid_address_one = utils.is_valid_pre_payment(from_address,symbol)
+                is_valid_address_two = utils.is_valid_pre_payment(to_address,symbol)
                 #todo frontend notification
-                user_message=''
-                try:
-                    broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
-                    print("broadcasting is:.....", broadcast_tx)
-                    user_message = "Broadcast transaction successful!"
-                except:
-                    user_message = "Failed to broadcast transaction!"
+                print("validity test for address 1: {}".format(from_address),is_valid_address_one)
+                print("validity test for address 2: {}".format(to_address),is_valid_address_two)
+                #if both addresses are valid, coin is valid and addresses are valid with coin
+                
+                if is_valid_address_one and is_valid_address_two:
+                    print("valid adddresses and coin...")
+                    
+                    #get private key
+                    address_one_details = utils.search_address(from_address)
+                    # print("from_address details:...", address_one_details)
+                    address_one_priv_key = address_one_details['private']
+                    address_one_pub_key = address_one_details['public']
+
+                    
+                    #inputs
+                    inputs =[{'address':from_address}]
+                    outputs = [{'address': to_address, "value": amount}]
+                    
+                    #todo front end notification
+                    print("sending payment {} from address: {} to address: {}".format(amount, from_address, to_address))
+                    
+                    #create unsigned transactions
+                    create_unsigned_tx = blockcypher.create_unsigned_tx(inputs=inputs, outputs=outputs, coin_symbol = symbol, api_key=token, verify_tosigntx=True, change_address=from_address)
+                    print("unsigned tx", create_unsigned_tx)
+                    
+                    to_sign_tx = {}
+                    to_sign_tx['tosign_tx'] = create_unsigned_tx['tosign_tx']
+                    to_sign_tx['tosign'] = create_unsigned_tx['tosign']
+                    
+                    #verify transaction
+                    verify_unsigned = blockcypher.verify_unsigned_tx(unsigned_tx=to_sign_tx, outputs=outputs, coin_symbol=symbol, change_address= from_address)
+                    input_addresses = blockcypher.get_input_addresses(create_unsigned_tx)
+                    tx=to_sign_tx['tosign']
+                    
+                    #signatures
+                    tx_signatures = blockcypher.make_tx_signatures(tx, privkey_list = [address_one_priv_key], pubkey_list=[address_one_pub_key])
+                    addresses_pubkeys = [address_one_pub_key]
+                    
+                    #finalize and broadcast transaction
+                    #todo frontend notification
+                    user_message=''
+                    try:
+                        broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
+                        print("broadcasting is:.....", broadcast_tx)
+                        user_message = "Broadcast transaction successful!"
+                    except:
+                        user_message = "Failed to broadcast transaction!"
+                    
+                else:
+                    user_message='Please check if the address is entered correctly'
             else:
-                user_message='Please check if the address is entered correctly'
+                print("{} is not a valid coin on BlockCypher(BC)".format(symbol))
+                user_message = "{} is not a valid coin on BlockCypher(BC)".format(symbol)
     return render(request, 'payment.html', {'form': form, "message": user_message})

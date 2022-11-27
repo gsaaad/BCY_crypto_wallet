@@ -6,5 +6,4 @@ class registerForm(forms.Form):
     # user_name = forms.CharField(max_length=12)
     date_of_birth = forms.DateField()
     email = forms.EmailField()
-
-    password = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput())
