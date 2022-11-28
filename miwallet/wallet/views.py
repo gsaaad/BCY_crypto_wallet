@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .login import loginForm
 from .register import registerForm
+from .register import MongoDBUserForm
 from .payment import checkAddressForm
 from miwallet import utils
 from pymongo import MongoClient
@@ -73,57 +74,62 @@ def login(request):
     return render(request, 'login.html', {'form':form})
 
 def register(request):
+    
     client = MongoClient('mongodb+srv://gsaaad:mongodjango@cluster0.4yjqtsv.mongodb.net/?retryWrites=true&w=majority', 27017)
     print("REGISTER")
     print("----------")
     form = registerForm()
+    mongoUserForm = MongoDBUserForm()
+    # print(mongoUserForm)
     user_message = ''
 
     
     if request.method == 'POST':
-        form = registerForm(request.POST)
-        
-        if form.is_valid():
+        form = registerForm(data=request.POST)
+        mongoUserForm = MongoDBUserForm(data=request.POST)
+        if form.is_valid and mongoUserForm.is_valid:
             print("VALIDATED!")
-            form_firstname = form.cleaned_data['first_name']
-            form_lastname = form.cleaned_data['last_name']
-            form_email = form.cleaned_data['email']
-            form_password = form.cleaned_data['password']
-            form_dob = str(form.cleaned_data['date_of_birth'])
-            print("First_name"+ form_firstname)
-            print("last_name"+ form_lastname)
-            # print("user_name"+ form.cleaned_data['user_name'])
-            print("Email: "+form_email)
-            print("date of birth: ",form_dob)
-            print("Password: "+form_password)
+            
             db = client['miWallets']
             Users = db['Users']
+            form_data = mongoUserForm.data
+            print("FORM DATA:",form_data)
+            result = Users.find_one({"email":form_data['email']})
             
-            result = Users.find_one({"email": form.cleaned_data['email']})
-            
+            user = mongoUserForm.save()        
             if result:
                 #we have this email in our record.. did you mean to login?
                 print("We found this email in our records.. Did you mean to login?")
                 user_message='We found this email in our records.. did you mean to login?' 
             else:
-                # not found in database, create new
-                user = {"first_name": form_firstname, 
-                    "last_name": form_lastname, 
-                    'email': form_email,
-                    'password': form_password,
-                    'dob': (form_dob),
-                    'Wallet': []
-                    #todo embed associated wallet, like OAP addresses in DB
-                    }
-                Users.insert_one(user)
-                # user_obj = User.objects.create_user(first_name= form_firstname,email=form_email, password=form_password)
-                # user_obj.save()
+               
+                user.save()
+                form_user_name = form_data['user_name']
+                form_first_name = form_data['first_name']
+                form_last_name = form_data['last_name']
+                form_dob = form_data['date_of_birth']
+                form_email = form_data['email']
+                form_password = form_data['password']
+                
+                user_entry = {"user_name": form_user_name,
+                              "first_name": form_first_name,
+                              "last_name": form_last_name,
+                              "dob": form_dob,
+                              "email": form_email,
+                              "password": form_password,
+                              "Wallet":[]
+                              }
+                Users.insert_one(user_entry)
+                
+
                 
                 print("REGISTRATION COMPLETE! WELCOME TO MIWALLET")
                 
                 return redirect('/home')
-                
-    return render(request, 'register.html', {'form': form, "message": user_message})
+        else:{
+            user_message("data was not validated... registration was not successful... try again later")
+        }        
+    return render(request, 'register.html', {'form': form, "MongoDBUserForm": mongoUserForm, "message": user_message})
 
 def payment(request):
     form = checkAddressForm()
