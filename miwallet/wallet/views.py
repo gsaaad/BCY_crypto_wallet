@@ -80,8 +80,7 @@ def register(request):
     print("----------")
     form = registerForm()
     mongoUserForm = MongoDBUserForm()
-    # print(mongoUserForm)
-    user_message = ''
+    front_end_message = ''
 
     
     if request.method == 'POST':
@@ -90,21 +89,21 @@ def register(request):
         if form.is_valid and mongoUserForm.is_valid:
             print("VALIDATED!")
             
+            #mongoDBconnection
             db = client['miWallets']
             Users = db['Users']
             form_data = mongoUserForm.data
-            print("FORM DATA:",form_data)
-            result = Users.find_one({"email":form_data['email']})
             
-            user = mongoUserForm.save()        
+            print("FORM DATA:",form_data)
+            # check if user already registered
+            result = Users.find_one({"email":form_data['email']})
             if result:
                 #we have this email in our record.. did you mean to login?
                 print("We found this email in our records.. Did you mean to login?")
-                user_message='We found this email in our records.. did you mean to login?' 
+                front_end_message='We found this email in our records.. did you mean to login?' 
             else:
                
-                user.save()
-                form_user_name = form_data['user_name']
+                form_user_name = form_data['username']
                 form_first_name = form_data['first_name']
                 form_last_name = form_data['last_name']
                 form_dob = form_data['date_of_birth']
@@ -119,21 +118,27 @@ def register(request):
                               "password": form_password,
                               "Wallet":[]
                               }
+                # mongoDB add new user
                 Users.insert_one(user_entry)
                 
-
-                
+                #save() django admin
+                user = form.save()
+                user_profile = mongoUserForm.save(commit=False)
+                user_profile.user = user
+                user_profile.save()
+                print('user',user)
+            
                 print("REGISTRATION COMPLETE! WELCOME TO MIWALLET")
                 
                 return redirect('/home')
         else:{
-            user_message("data was not validated... registration was not successful... try again later")
+            front_end_message("data was not validated... registration was not successful... try again later")
         }        
-    return render(request, 'register.html', {'form': form, "MongoDBUserForm": mongoUserForm, "message": user_message})
+    return render(request, 'register.html', {'form': form, "MongoDBUserForm": mongoUserForm, "message": front_end_message})
 
 def payment(request):
     form = checkAddressForm()
-    user_message = ''
+    front_end_message = ''
 
     if request.method == 'POST':
         form = checkAddressForm(request.POST)
@@ -191,17 +196,17 @@ def payment(request):
                     
                     #finalize and broadcast transaction
                     #todo frontend notification
-                    user_message=''
+                    front_end_message=''
                     try:
                         broadcast_tx = blockcypher.broadcast_signed_transaction(create_unsigned_tx,tx_signatures, pubkeys=addresses_pubkeys, coin_symbol=symbol, api_key=token)
                         print("broadcasting is:.....", broadcast_tx)
-                        user_message = "Broadcast transaction successful!"
+                        front_end_message = "Broadcast transaction successful!"
                     except:
-                        user_message = "Failed to broadcast transaction!"
+                        front_end_message = "Failed to broadcast transaction!"
                     
                 else:
-                    user_message='Please check if the address is entered correctly'
+                    front_end_message='Please check if the address is entered correctly'
             else:
                 print("{} is not a valid coin on BlockCypher(BC)".format(symbol))
-                user_message = "{} is not a valid coin on BlockCypher(BC)".format(symbol)
-    return render(request, 'payment.html', {'form': form, "message": user_message})
+                front_end_message = "{} is not a valid coin on BlockCypher(BC)".format(symbol)
+    return render(request, 'payment.html', {'form': form, "message": front_end_message})

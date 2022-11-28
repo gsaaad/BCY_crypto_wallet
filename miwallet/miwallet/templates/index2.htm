@@ -16,10 +16,20 @@
           <a href="/">Mi-Wallet</a>
         </div>
         <div class="basis-1/5">
+          {% if not user %}
           <ul class="flex space-x-4 text-base font-semibold lg:text-xl">
             <li><a href="login">Login</a></li>
             <li><a href="register">Register</a></li>
           </ul>
+          {% else %}
+          <!-- currently Anon -->
+          <!-- todo: user user.first_name for introduction! -->
+          <ul class="flex space-x-4 text-base font-semibold lg:text-xl">
+            <li>Hello, {{user.first_name}}</li>
+            <li><a href="#">Logout</a></li>
+          </ul>
+
+          {% endif %}
         </div>
       </nav>
     </header>
