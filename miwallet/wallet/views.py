@@ -17,6 +17,8 @@ def index(request):
     
     return render(request, 'index2.htm')
 
+
+
 def home(request):
    # get the list of todos
 #    response = requests.get('https://jsonplaceholder.typicode.com/todos/')
