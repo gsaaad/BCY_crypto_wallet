@@ -37,10 +37,38 @@
         </a>
         <button
           class="bg-blue-400 rounded-lg p-2 border-2 border-blue-600 text-base lg:text-xl"
+          id="receive-btn"
+          onclick="displayReceivePayments()"
         >
           <!-- todo add a QR CODE page to receive payment -->
           Receive BitCrystals (BCY)
         </button>
+      </div>
+      <div id="receive-payment" style="display: none">
+        <h1>Enter your address below to receive payments (QR-CODE)</h1>
+
+        <input type="text" id="receive-address-input" />
+        <button id="addressBtn">Get QR-Code</button>
+
+        <h4 id="receive-address-header">
+          Address: C9PCEfkWhK5ohGxNU957SxKg9qdcg3RSw
+        </h4>
+        <div id="qr-code-container">
+          <img
+            src="//chart.googleapis.com/chart?cht=qr&amp;chl=blockcyphertestnet%3AC9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw&amp;choe=UTF-8&amp;chs=300x300"
+            alt="C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw"
+            id="address-qr-code"
+            title="C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw"
+            class="border-4 border-black mx-auto h-64 m-4"
+          />
+          <a
+            class="text-blue-400 border-b-4 border-blue-500"
+            id="address-link"
+            href="https://live.blockcypher.com/bcy/address/C9PCEfkWhK5ohGxNU957SxKg9qdcg3XRSw/"
+            >Click here to go to the official Blockcypher Test Network
+            Address</a
+          >
+        </div>
       </div>
       <div>
         <div class="mx-auto w-3/5">
@@ -50,4 +78,29 @@
       </div>
     </div>
   </body>
+  <script>
+    var receiveBtn = document.getElementById("addressBtn");
+    receiveBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      var address = document.getElementById("receive-address-input").value;
+      getQRCodeAndLink(address);
+    });
+    function displayReceivePayments() {
+      var paymentContainer = document.getElementById("receive-payment");
+      paymentContainer.getAttribute("style") === "display: none"
+        ? paymentContainer.setAttribute("style", "display: block")
+        : paymentContainer.setAttribute("style", "display: none");
+    }
+    function getQRCodeAndLink(address) {
+      var qrCode = document.getElementById("address-qr-code");
+      var addressLink = document.getElementById("address-link");
+      var Link = `https://live.blockcypher.com/bcy/address/${address}/`;
+      console.log("getting QRcode for this associated address...");
+      imgUrl = `//chart.googleapis.com/chart?cht=qr&amp;chl=blockcyphertestnet%3A${address}&amp;choe=UTF-8&amp;chs=300x300`;
+      console.log(imgUrl);
+      console.log(addressLink);
+      qrCode.setAttribute("src", imgUrl);
+      addressLink.setAttribute("href", Link);
+    }
+  </script>
 </html>
