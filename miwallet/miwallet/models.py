@@ -21,8 +21,9 @@ Oap = db['Oap']
 # collection PUBLIC ADDRESSES. USE THESE FOR VALIDITY, STORAGE AND BASIC INFO ABOUT ADDRESSES
 Addresses = db['Addresses']
 
-if db.list_collection_names():
-    print("ALL COLLECTIONS in {} Database".format(database_name), db.list_collection_names())
+collection_names = db.list_collection_names()
+if collection_names:
+    print("ALL COLLECTIONS in {} Database".format(database_name), collection_names)
     print("Connection established to MongoDB database!")
 
 

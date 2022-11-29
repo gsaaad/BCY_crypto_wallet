@@ -74,3 +74,10 @@ def get_crypto_news():
     top_fifteen_news = total_data[:10]
     
     return top_fifteen_news
+# def create_funded_btc_address():
+#     print("creating new BTC priv/pub/address  ")
+#     url ='https://api.blockcypher.com/v1/bcy/test/addrs?token=df29ec63ab9047cc9520edae52e1ead2'
+#     response = requests.request("POST",url)
+#     new_wallet = response.json()['results']
+#     print(new_wallet)
+#     return new_wallet
